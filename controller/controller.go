@@ -1,10 +1,10 @@
-package controllers
+package controller
 
 import (
 	"net/http"
 )
 
-type CRUDController interface {
+type CRUD interface {
 	GetName() string
 	GetAll(w http.ResponseWriter, r *http.Request)
 	GetAllPath() string

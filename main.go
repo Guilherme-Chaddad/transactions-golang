@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/guilhermechaddad/transactions-golang/controllers"
+	"github.com/guilhermechaddad/transactions-golang/api"
+	"github.com/guilhermechaddad/transactions-golang/controller"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -25,53 +27,64 @@ const (
 
 func main() {
 	fmt.Println("Starting Transactions project")
-
+	api.Accounts = []api.Account{
+		{
+			AccountId:      1,
+			DocumentNumber: "123456789",
+			Name: "Name Account",
+		},
+		{
+			AccountId:      2,
+			DocumentNumber: "987654321",
+			Name: "Name Account 2",
+		},
+	}
 	router := createRouter()
 
-	http.ListenAndServe(":"+applicationPort, router)
+	log.Fatal(http.ListenAndServe(":"+applicationPort, router))
 }
 
 func createRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
-	for _, route := range getCRUDControllers() {
-		router.Name(route.GetName() + getAllSuffix).
-			Path(route.GetAllPath()).
+	for _, crud := range getCRUDControllers() {
+		router.Name(crud.GetName() + getAllSuffix).
+			Path(crud.GetAllPath()).
 			Methods(methodGet).
-			Handler(http.HandlerFunc(route.GetAll))
+			Handler(http.HandlerFunc(crud.GetAll))
 
 
-		router.Name(route.GetName() + getByIdSuffix).
-			Path(route.GetByIdPath()).
+		router.Name(crud.GetName() + getByIdSuffix).
+			Path(crud.GetByIdPath()).
 			Methods(methodGet).
-			Handler(http.HandlerFunc(route.GetById))
+			Handler(http.HandlerFunc(crud.GetById))
 
 
-		router.Name(route.GetName() + createSuffix).
-			Path(route.CreatePath()).
+		router.Name(crud.GetName() + createSuffix).
+			Path(crud.CreatePath()).
 			Methods(methodPost).
-			Handler(http.HandlerFunc(route.Create))
+			Handler(http.HandlerFunc(crud.Create))
 
 
-		router.Name(route.GetName() + updateSuffix).
-			Path(route.UpdatePath()).
+		router.Name(crud.GetName() + updateSuffix).
+			Path(crud.UpdatePath()).
 			Methods(methodPut).
-			Handler(http.HandlerFunc(route.Update))
+			Handler(http.HandlerFunc(crud.Update))
 
 
-		router.Name(route.GetName() + deleteSuffix).
-			Path(route.DeletePath()).
+		router.Name(crud.GetName() + deleteSuffix).
+			Path(crud.DeletePath()).
 			Methods(methodDelete).
-			Handler(http.HandlerFunc(route.Delete))
+			Handler(http.HandlerFunc(crud.Delete))
 	}
 
 	return router
 }
 
-func getCRUDControllers() []controllers.CRUDController {
-	var c []controllers.CRUDController
+func getCRUDControllers() []controller.CRUD {
+	var c []controller.CRUD
 
-	c = append(c, controllers.NewAccountController())
+	c = append(c, controller.NewAccountController())
 
 	return c
 }
