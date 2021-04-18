@@ -6,7 +6,5 @@ type Account struct {
 	Name string `json:"name"`
 }
 
-var Accounts []Account
-
 
 

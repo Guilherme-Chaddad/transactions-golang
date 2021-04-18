@@ -12,42 +12,42 @@ import (
 )
 
 const (
-	name = "Account Handler"
+	name = "AccountService Handler"
 	accountBasePath = "/accounts"
 	accountIdPath = "/{id:[0-9]+}"
 )
 
-type Account struct {
-	service service.Account
+type AccountController struct {
+	service service.AccountService
 }
 
-func NewAccountController() Account {
-	return Account{
+func NewAccountController() AccountController {
+	return AccountController{
 		service: service.NewAccountService(),
 	}
 }
 
-func (a Account) GetAll(w http.ResponseWriter, r *http.Request) {
+func (a AccountController) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts := a.service.GetAllAccounts()
 
 	_ = json.NewEncoder(w).Encode(accounts)
 }
 
-func (a Account) GetById(w http.ResponseWriter, r *http.Request) {
+func (a AccountController) GetById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 	account := a.service.GetAccountById(int64(id))
 
 	if account == nil {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Account not found for id %d", id)
+		fmt.Fprintf(w, "AccountService not found for id %d", id)
 		return
 	}
 
 	json.NewEncoder(w).Encode(account)
 }
 
-func (a Account) Create(w http.ResponseWriter, r *http.Request) {
+func (a AccountController) Create(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var account api.Account
 	err := json.Unmarshal(reqBody, &account)
@@ -71,7 +71,7 @@ func (a Account) Create(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (a Account) Update(w http.ResponseWriter, r *http.Request) {
+func (a AccountController) Update(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 
@@ -89,15 +89,15 @@ func (a Account) Update(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Could not update Account: %s.", err.Error())
+		fmt.Fprintf(w, "Could not update AccountService: %s.", err.Error())
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "Account updated Successfully")
+	fmt.Fprintln(w, "AccountService updated Successfully")
 }
 
-func (a Account) Delete(w http.ResponseWriter, r *http.Request) {
+func (a AccountController) Delete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 
@@ -105,34 +105,34 @@ func (a Account) Delete(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Could not delete Account: %s.", err.Error())
+		fmt.Fprintf(w, "Could not delete AccountService: %s.", err.Error())
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "Account deleted successfully")
+	fmt.Fprintln(w, "AccountService deleted successfully")
 }
 
-func (a Account) GetName() string {
+func (a AccountController) GetName() string {
 	return name
 }
 
-func (a Account) GetAllPath() string {
+func (a AccountController) GetAllPath() string {
 	return accountBasePath
 }
 
-func (a Account) GetByIdPath() string {
+func (a AccountController) GetByIdPath() string {
 	return accountBasePath + accountIdPath
 }
 
-func (a Account) CreatePath() string {
+func (a AccountController) CreatePath() string {
 	return accountBasePath
 }
 
-func (a Account) UpdatePath() string {
+func (a AccountController) UpdatePath() string {
 	return accountBasePath + accountIdPath
 }
 
-func (a Account) DeletePath() string {
+func (a AccountController) DeletePath() string {
 	return accountBasePath + accountIdPath
 }

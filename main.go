@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/guilhermechaddad/transactions-golang/api"
 	"github.com/guilhermechaddad/transactions-golang/controller"
 	"log"
 	"net/http"
@@ -27,18 +26,6 @@ const (
 
 func main() {
 	fmt.Println("Starting Transactions project")
-	api.Accounts = []api.Account{
-		{
-			AccountId:      1,
-			DocumentNumber: "123456789",
-			Name: "Name Account",
-		},
-		{
-			AccountId:      2,
-			DocumentNumber: "987654321",
-			Name: "Name Account 2",
-		},
-	}
 	router := createRouter()
 
 	log.Fatal(http.ListenAndServe(":"+applicationPort, router))
