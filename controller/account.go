@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	name = "AccountService Handler"
+	name = "Service Handler"
 	accountBasePath = "/accounts"
 	accountIdPath = "/{id:[0-9]+}"
 )
@@ -21,10 +21,8 @@ type AccountController struct {
 	service service.AccountService
 }
 
-func NewAccountController() AccountController {
-	return AccountController{
-		service: service.NewAccountService(),
-	}
+func NewAccountController(service service.AccountService) AccountController {
+	return AccountController{ service: service, }
 }
 
 func (a AccountController) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +38,7 @@ func (a AccountController) GetById(w http.ResponseWriter, r *http.Request) {
 
 	if account == nil {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "AccountService not found for id %d", id)
+		fmt.Fprintf(w, "Service not found for id %d", id)
 		return
 	}
 
@@ -89,12 +87,12 @@ func (a AccountController) Update(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Could not update AccountService: %s.", err.Error())
+		fmt.Fprintf(w, "Could not update Service: %s.", err.Error())
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "AccountService updated Successfully")
+	fmt.Fprintln(w, "Service updated Successfully")
 }
 
 func (a AccountController) Delete(w http.ResponseWriter, r *http.Request) {
@@ -105,12 +103,12 @@ func (a AccountController) Delete(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Could not delete AccountService: %s.", err.Error())
+		fmt.Fprintf(w, "Could not delete Service: %s.", err.Error())
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "AccountService deleted successfully")
+	fmt.Fprintln(w, "Service deleted successfully")
 }
 
 func (a AccountController) GetName() string {
