@@ -15,4 +15,5 @@ func TestAccountControllerPaths(t *testing.T) {
 	assert.Equal(t, accountBasePath + accountIdPath, acc.GetByIdPath())
 	assert.Equal(t, accountBasePath + accountIdPath, acc.UpdatePath())
 	assert.Equal(t, accountBasePath + accountIdPath, acc.DeletePath())
+	assert.Equal(t, name, acc.GetName())
 }
