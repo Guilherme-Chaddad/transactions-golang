@@ -1,12 +1,13 @@
 package controller
 
 import (
+	"github.com/guilhermechaddad/transactions-golang/service"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestAccountControllerPaths(t *testing.T) {
-	acc := NewAccountController()
+	acc := NewAccountController(service.Service{})
 
 	assert.NotNil(t, acc.service)
 	assert.Equal(t, accountBasePath, acc.GetAllPath())

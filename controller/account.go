@@ -27,7 +27,6 @@ func NewAccountController(service service.AccountService) AccountController {
 
 func (a AccountController) GetAll(w http.ResponseWriter, r *http.Request) {
 	accounts := a.service.GetAllAccounts()
-
 	_ = json.NewEncoder(w).Encode(accounts)
 }
 
