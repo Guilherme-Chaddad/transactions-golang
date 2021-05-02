@@ -3,7 +3,6 @@ package routes
 import (
 	"github.com/gorilla/mux"
 	"github.com/guilhermechaddad/transactions-golang/config"
-	"github.com/guilhermechaddad/transactions-golang/controller"
 	"net/http"
 )
 
@@ -20,10 +19,10 @@ const (
 	updateSuffix = "_UpdateMethod"
 )
 
-func CreateRouter(i *config.Infrastructure) *mux.Router {
+func CreateRouter(i config.InfrastructureInterface) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
-	for _, crud := range getCRUDControllers(i) {
+	for _, crud := range i.GetCRUDControllers() {
 		router.Name(crud.GetName() + getAllSuffix).
 			Path(crud.GetAllPath()).
 			Methods(methodGet).
@@ -55,12 +54,4 @@ func CreateRouter(i *config.Infrastructure) *mux.Router {
 	}
 
 	return router
-}
-
-func getCRUDControllers(i *config.Infrastructure) []controller.CRUD {
-	var c []controller.CRUD
-
-	c = append(c, i.GetAccountController())
-
-	return c
 }

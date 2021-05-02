@@ -6,21 +6,21 @@ import (
 	"github.com/guilhermechaddad/transactions-golang/service"
 )
 
-func (i Infrastructure) GetAccountController() controller.CRUD {
+func (i Infrastructure) getAccountController() controller.CRUD {
 	if i.accountController == nil {
-		i.accountController = controller.NewAccountController(i.GetAccountService())
+		i.accountController = controller.NewAccountController(i.getAccountService())
 	}
 	return i.accountController
 }
 
-func (i Infrastructure) GetAccountService() service.AccountService {
+func (i Infrastructure) getAccountService() service.AccountService {
 	if i.accountService == nil {
-		i.accountService = service.NewAccountService(i.GetAccountRepository())
+		i.accountService = service.NewAccountService(i.getAccountRepository())
 	}
 	return i.accountService
 }
 
-func (i Infrastructure) GetAccountRepository() repository.AccountRepository {
+func (i Infrastructure) getAccountRepository() repository.AccountRepository {
 	if i.accountRepository == nil {
 		i.accountRepository = repository.GetAccountRepository()
 	}
